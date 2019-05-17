@@ -1,0 +1,64 @@
+import axios from 'axios'
+import qs from 'querystring';
+
+var endpoints = {
+    api: 'http://localhost:4000/api/',
+};
+
+export default {
+    getUrl(url){
+        return endpoints.api + url.replace(/^\//, '');
+    },
+    getConfig(config){
+        if(!config){
+            config = {};
+        }
+        config.headers = $.extend({}, this.getHeaders(), config.headers);
+
+        return config;
+    },
+    getHeaders(){
+        return {
+            //'x-csrf-token': $('meta[name=csrf-token]').attr('content'),
+        };
+    },
+    get(url, data, config){
+        config = this.getConfig(config);
+        url = this.getUrl(url);
+
+        if( Object.entries(data || {}).length ){
+            if( url.indexOf('?') < 0){
+                url += '?';
+            }
+            url += qs.stringify(data);
+        }
+        return axios.get(url, config)
+            .then(function(result){
+                return result.data;
+            })
+            .catch(function (err) {
+                return err.response.data || {status: 'failed', message: err.message}
+            });
+    },
+    post(url, data, config){
+        url = this.getUrl(url);
+        config = this.getConfig(config);
+        
+        return axios.post(url, data, config).then(result => {
+            return result.data;
+        }).catch(err => {
+            return err.response.data || {status: 'failed', message: err.message}
+        })
+    },
+
+    getTasks(){
+        return this.get('tasks');
+    },
+
+    getUserByEmail(email){
+        return this.get('users/by-email', {email: email});
+    },
+    createUser(data){
+        return this.post('users/create', data);
+    }
+}
