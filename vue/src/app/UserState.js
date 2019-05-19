@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import ApiService from '../utils/ApiService';
 
 export default new Vue({
     data(){
@@ -16,11 +17,15 @@ export default new Vue({
                 logged: false,
             }
         },
-        login(user){
+        login(user, saveSession){
             Object.assign(this, user, {logged: true});
+            if(saveSession){
+                ApiService.sessionSet({user: user});
+            }
         },
         logout(){
             Object.assign(this, {logged: false}, this.defaultData());
+            ApiService.sessionClear()
         }
     }
 });

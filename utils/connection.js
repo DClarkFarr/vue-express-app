@@ -13,7 +13,6 @@ class Connection {
 
     static connect(resolve){
         _client = new MongoClient(new Server('localhost', 27017));
-        
         _client.connect().then(con => {
             _db = con.db("local");
 

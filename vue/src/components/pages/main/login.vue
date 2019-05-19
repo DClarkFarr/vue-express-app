@@ -97,7 +97,7 @@ export default {
       }
     },
     login(user){
-      this.$root.user.login(user);
+      this.$root.user.login(user, true);
       this.success = "Login successful!"
       setTimeout(() => {
         this.$router.push('/');

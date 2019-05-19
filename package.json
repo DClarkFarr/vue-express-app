@@ -18,5 +18,8 @@
     "htmling": "0.0.8",
     "mongodb": "^3.2.4",
     "mongoose": "^5.5.8"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.0"
   }
 }

@@ -1,8 +1,10 @@
 import axios from 'axios'
 import qs from 'querystring';
 
+axios.defaults.withCredentials = true
+
 var endpoints = {
-    api: 'http://localhost:4000/api/',
+    api: 'http://localhost:3333/api/',
 };
 
 export default {
@@ -18,7 +20,8 @@ export default {
         return config;
     },
     getHeaders(){
-        return {
+        return {   
+            //'x-origin': window.location.host, 
             //'x-csrf-token': $('meta[name=csrf-token]').attr('content'),
         };
     },
@@ -60,5 +63,14 @@ export default {
     },
     createUser(data){
         return this.post('users/create', data);
+    },
+    sessionGet(){
+        return this.post('session/get', {nothing: true})
+    },
+    sessionSet(data){
+        return this.post('session/set', data)
+    },
+    sessionClear(){
+        return this.post('session/clear')
     }
 }
