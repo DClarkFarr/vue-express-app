@@ -77,7 +77,7 @@ export default {
             this.accountExists = false;
           }
         }).catch(err => {
-          this.error = 'Could not perform login.'
+          this.error = 'Could not perform login. ' + err
         });
       }else{
         if(!this.name.length){

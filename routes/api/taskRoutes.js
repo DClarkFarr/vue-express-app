@@ -45,6 +45,20 @@ router.post('/delete/:id_task', (req, res) => {
     })
 })
 
+router.post('/toggleCompleted/:id_task', (req, res) => {
+    Task.find(req.params.id_task).then(task => {
+        var promise;
+        if(task.completed){
+            promise = task.unmarkComplete();
+        }else{
+            promise = task.markComplete(req.body.user);
+        }
+        promise.then(() => {
+            res.json({status: 'success', task: task});
+        })
+    })
+})
+
 router.get('/get/:id_task', (req, res) => {
 
     console.log('get task', req.params.id_task);

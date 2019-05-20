@@ -1,8 +1,8 @@
 <template>
     <div class="task-item d-flex w-100 px-3 py-2 mb-2 align-items-center">
         <div class="completed">
-            <div class="icon checkmark" :class="{checked: !!task.completed}" v-on:click="onToggleComplete">
-                <i class="fa" :class="{'fa-check-square-o': !!task.completed, 'fa-square-o': !task.completed}"></i>
+            <div class="icon checkmark" :class="{checked: !!task.completed, disabled: toggling}" v-on:click="onToggleComplete">
+                <i class="fa" :class="iconStatus"></i>
             </div>
         </div>
         <div class="description">
@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 
 export default {
     props: {
@@ -38,11 +39,22 @@ export default {
     data(){
         return {
             submitting: false,
+            toggling: false,
         }
     },
     methods: {
         onToggleComplete(){
-            //this.$root.task.completeTask()
+            this.toggling = true;
+
+            const userData = {};
+            if(this.$root.user.id){
+                userData.id = this.$root.user.id;
+                userData.name = this.$root.user.name;
+            }
+
+            this.$root.tasks.toggleCompleted(this.task.id, userData).then(() => {
+                this.toggling = false;
+            })
         },
         onDelete(){
             this.submitting = true;
@@ -52,8 +64,13 @@ export default {
         }
     },
     computed: {
+        iconStatus(){
+            if(this.toggling){
+                return {'fa-circle-o-notch fa-spin': this.toggling};
+            }
+            return {'fa-check-square-o': !!this.task.completed, 'fa-square-o': !this.task.completed};
+        },
         canDelete(){
-            // console.log(this.task.text, this.task.id_user, this.$root.user.id)
             return !this.task.id_user || this.task.id_user == this.$root.user.id
         },
         completedBy(){
@@ -80,6 +97,8 @@ export default {
 <style scoped>
     .completed .icon {
         font-size: 1.5rem;
+    }
+    .completed .icon:not(.disabled){
         cursor: pointer;
     }
     .completed .icon.checked {

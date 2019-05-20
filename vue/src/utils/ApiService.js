@@ -63,6 +63,9 @@ export default {
     deleteTask(taskId){
         return this.post('tasks/delete/' + taskId)
     },
+    toggleTaskCompleted(taskId, data){
+        return this.post('tasks/toggleCompleted/' + taskId, data);
+    },
 
     getUserByEmail(email){
         return this.get('users/by-email', {email: email})

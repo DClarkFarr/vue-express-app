@@ -56,7 +56,7 @@ export default {
             this.error = '';
         },
         currUserId(){
-            return this.$root.user._id || false;
+            return this.$root.user.id || false;
         }
     }
 }

@@ -3,7 +3,9 @@ const ObjectId = require('mongodb').ObjectId;
 
 class User {
     constructor(data){
-
+        if(data){
+            this.set(data)
+        }
     }
     set(data){
         for (const [key, value] of Object.entries(data)) {

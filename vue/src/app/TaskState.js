@@ -54,10 +54,23 @@ export default new Vue({
                 return id == t.id
             })
 
-            return ApiService.deleteTask(id).then(result => {
+            return ApiService.deleteTask(id).then(() => {
                 const tasks = [...this.tasks]
                 tasks.splice(index, 1)
                 this.tasks = tasks
+            });
+        },
+        toggleCompleted(id, userData){
+            var task = this.tasks.find(t => {
+                return id == t.id
+            })
+
+            return ApiService.toggleTaskCompleted(id, {user: userData}).then((result) => {
+                if(result.status == 'success'){
+                    task.completed = result.task.completed
+                    task.completed_by = result.task.completed_by
+                    task.completed_at = result.task.completed_at
+                }
             });
         }
     }

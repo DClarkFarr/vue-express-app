@@ -39,7 +39,7 @@ export default {
   },
   watch: {
     '$root.tasks.tasks': function(tasks){
-      this.tasks = tasks;
+      this.tasks = [...tasks];
     }
   },
   components: {
