@@ -21,6 +21,7 @@ export default {
     ApiService.sessionGet().then(result => {
       var session = result.session;
       if(session.user){
+        console.log('set user');
         this.user.login(session.user)
       }
       if(session.tasks){

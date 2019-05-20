@@ -7,7 +7,10 @@ const User = require(root('models/User'));
 
 router.get('/by-email', (req, res) => {
     const db = getDb();
-    db.collection('users').findOne({email: req.query.email}).then(user => {
+    db.collection('users').findOne({email: req.query.email}).then(row => {
+        const user = new User;
+        user.set(row);
+        
         res.json({user: user})
     })
 })

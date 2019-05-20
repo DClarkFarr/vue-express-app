@@ -37,6 +37,11 @@ export default {
       this.tasks = tasks;
     });
   },
+  watch: {
+    '$root.tasks.tasks': function(tasks){
+      this.tasks = tasks;
+    }
+  },
   components: {
     defaultLayout, 
     TaskList,   

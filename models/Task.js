@@ -10,11 +10,15 @@ class Task {
         for (const [key, value] of Object.entries(data)) {
             this[key] = value;
         };
+        if(this._id){
+            this.id = this._id;
+        }
         return this;
     }
 
     onCreate(){
         const defaults = {
+            id: null,
             text: '',
             created_at: (new Date()).toUTCString(),
             completed: 0,
@@ -33,6 +37,7 @@ class Task {
 
     toObject(){
         return {
+            id: this.id,
             text: this.text,
             completed: this.completed,
             created_at: this.created_at,

@@ -9,11 +9,15 @@ class User {
         for (const [key, value] of Object.entries(data)) {
             this[key] = value;
         };
+        if(this._id){
+            this.id = this._id;
+        }
         return this;
     }
 
     onCreate(){
         const defaults = {
+            id: null,
             name: '',
             email: '',
             created_at: (new Date()).toUTCString(),
@@ -29,6 +33,7 @@ class User {
 
     toObject(){
         return {
+            id: this.id,
             name: this.name,
             email: this.email,
             active: this.active,

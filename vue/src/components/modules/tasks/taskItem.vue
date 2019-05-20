@@ -47,7 +47,8 @@ export default {
     },
     computed: {
         canDelete(){
-            return !this.task.id_user || this.task.id_user == this.$root.user._id
+            // console.log(this.task.text, this.task.id_user, this.$root.user.id)
+            return !this.task.id_user || this.task.id_user == this.$root.user.id
         },
         completedBy(){
             return {
@@ -66,7 +67,7 @@ export default {
                     : '(Annon User)',
             }
         }
-    }
+    },
 }
 </script>
 

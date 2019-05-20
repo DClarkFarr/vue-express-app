@@ -9,7 +9,7 @@ export default new Vue({
     methods: {
         defaultData(){
             return  {
-                _id: false,
+                id: false,
                 email: null,
                 name: null,
                 created_at: null,
@@ -27,5 +27,5 @@ export default new Vue({
             Object.assign(this, {logged: false}, this.defaultData());
             ApiService.sessionClear()
         }
-    }
+    },
 });
