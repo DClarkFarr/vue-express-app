@@ -1,15 +1,21 @@
 <template>
     <div class="task-item d-flex w-100 px-3 py-2 mb-2 align-items-center">
         <div class="completed">
-            <div class="icon checkmark" :class="{checked: !!task.completed}">
+            <div class="icon checkmark" :class="{checked: !!task.completed}" v-on:click="onComplete">
                 <i class="fa" :class="{'fa-check-square-o': !!task.completed, 'fa-square-o': !task.completed}"></i>
             </div>
         </div>
         <div class="description">
             {{task.text}}
         </div>
-        <div class="author ml-auto" v-if="task.completed">
+        <div class="created_by ml-auto align-self-start" v-if="task.author">
             <label>Author</label>
+            <div>
+                By {{authoredBy.name}}
+            </div>
+        </div>
+        <div class="completed_by ml-auto align-self-start" v-if="task.completed">
+            <label>Completed</label>
             <div>
                 By {{completedBy.name}}
             </div>
@@ -35,7 +41,9 @@ export default {
         }
     },
     methods: {
-
+        onComplete(){
+            //this.$root.task.completeTask()
+        },
     },
     computed: {
         canDelete(){
@@ -49,6 +57,13 @@ export default {
                 date: this.task.completed_at 
                     ? moment(this.task.completed_at).format('MMM DD YYYY @h:mma')
                     : '(N/A)'
+            }
+        },
+        authoredBy(){
+            return {
+                name: this.task.author 
+                    ? this.task.author.name
+                    : '(Annon User)',
             }
         }
     }

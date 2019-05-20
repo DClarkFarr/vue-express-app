@@ -8,8 +8,18 @@ const Task = require(root('models/task'));
 
 router.get('/', (req, res) => {
     const db = getDb();
-    db.collection('tasks').find().toArray().then(tasks => {
-        res.json(tasks);
+    db.collection('tasks').find().toArray().then((tasks) => {
+        tasks = Task.collect(tasks)
+        Promise.all(
+            tasks.map( (t) => {
+                return t.inflate();
+            })
+        ).then(() => {
+            res.json(
+                tasks
+            )
+        })
+        
     })
 
 });

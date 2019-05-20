@@ -42,7 +42,7 @@ export default new Vue({
             return ApiService.addTask(data).then((result) => {
                 if(result.status == 'success'){
                     this.tasks.push({...result.task});
-
+                    this.$emit('task.added', [...this.tasks]);
                     return result;
                 }else{
                     return result;

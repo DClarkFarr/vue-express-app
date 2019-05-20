@@ -1,4 +1,5 @@
 const getDb = require('../utils/connection').getDb;
+const ObjectId = require('mongodb').ObjectId;
 
 class User {
     constructor(data){
@@ -8,6 +9,7 @@ class User {
         for (const [key, value] of Object.entries(data)) {
             this[key] = value;
         };
+        return this;
     }
 
     onCreate(){
@@ -42,8 +44,18 @@ class User {
         const db = getDb();
 
         return db.collection('users').insertOne(obj).then(function(inserted){
-            console.log(inserted.insertedId);
             return obj;
+        });
+    }
+    static find(_id){
+        const db = getDb();
+        const user = new this();
+       
+        return db.collection('users').findOne({_id: ObjectId(_id)}).then(data => {
+            if(data){
+                return user.set(data);
+            }
+            return false;
         });
     }
 }

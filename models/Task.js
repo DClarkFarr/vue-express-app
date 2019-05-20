@@ -1,5 +1,7 @@
 const getDb = require('../utils/connection').getDb;
 
+const User = require('./User')
+
 class Task {
     constructor(data){
 
@@ -8,6 +10,7 @@ class Task {
         for (const [key, value] of Object.entries(data)) {
             this[key] = value;
         };
+        return this;
     }
 
     onCreate(){
@@ -18,6 +21,7 @@ class Task {
             completed_by: null,
             completed_at: null,
             id_user: false,
+            author: null,
         };
 
         for (const [key, value] of Object.entries(defaults)) {
@@ -35,6 +39,16 @@ class Task {
             id_user: this.id_user,
         }
     }
+    async inflate(){
+        this.author = null;
+        if(this.id_user){
+            await User.find(this.id_user).then(user => {
+                this.author = user;
+            });
+        }        
+
+        return this;
+    }
 
     static create(data){
         var task = new this();
@@ -44,9 +58,13 @@ class Task {
         const db = getDb();
 
         return db.collection('tasks').insertOne(task).then(function(inserted){
-            console.log(inserted.insertedId);
             return task;
         });
+    }
+    static collect(tasks){
+        return tasks.map(t => {
+            return (new Task).set(t)
+        })
     }
 }
 
