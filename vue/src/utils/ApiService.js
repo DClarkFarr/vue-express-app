@@ -57,6 +57,9 @@ export default {
     getTasks(){
         return this.get('tasks');
     },
+    addTask(data){
+        return this.post('tasks/add', data);
+    },
 
     getUserByEmail(email){
         return this.get('users/by-email', {email: email});

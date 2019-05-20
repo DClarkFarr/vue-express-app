@@ -3,19 +3,27 @@
     <default-layout>
         <div class="container">
             <h1>Home</h1>
-            <div class="tasks">
-              <div v-for="task in tasks" :key="task._id">
-                <span>{{ task.text || '(No Text)'}}</span>
-              </div>
+            <div v-if="tasks.length" class="home-tasks">
+              <task-list :tasks="tasks"></task-list>
             </div>
+            <div v-else>
+              <h3>No Tasks Found</h3>
+            </div>
+
+            <hr>
+
+            <task-create-form></task-create-form>
         </div>
+
     </default-layout>
   </div>
 </template>
 
 <script>
 import defaultLayout from '../../layouts/default';
-import ApiService from '../../../utils/ApiService';
+
+import TaskList from '../../modules/tasks/taskList'
+import TaskCreateForm from '../../modules/tasks/createForm'
 
 export default {
   name: 'page-main-home',
@@ -25,12 +33,14 @@ export default {
     }
   },
   mounted(){
-    ApiService.getTasks().then((tasks, request) => {
+    this.$root.tasks.getTasks().then((tasks) => {
       this.tasks = tasks;
     });
   },
   components: {
-    defaultLayout,    
+    defaultLayout, 
+    TaskList,   
+    TaskCreateForm,
   }
 }
 </script>

@@ -15,6 +15,8 @@ class Task {
             text: '',
             created_at: (new Date()).toUTCString(),
             completed: 0,
+            completed_by: null,
+            completed_at: null,
             id_user: false,
         };
 

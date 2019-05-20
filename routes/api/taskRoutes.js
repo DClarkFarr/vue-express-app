@@ -15,10 +15,17 @@ router.get('/', (req, res) => {
 });
 
 router.post('/add', (req, res) => {
+    if(!req.body.text){
+        res.json({status: 'failed', message: 'Task description required'});
+        return;
+    }
+
     Task.create({
         text: req.body.text,
+        completed: req.body.completed,
+        id_user: req.body.id_user,
     }).then(task => {
-        res.json(task);
+        res.json({status: 'success', task: task});
     });
 });
 

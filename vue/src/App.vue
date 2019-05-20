@@ -7,9 +7,10 @@
 <script>
 import defaultLayout from './components/layouts/default';
 
-import userState from './app/UserState';
+import userState from './app/UserState'
+import taskState from './app/TaskState'
 
-import router from './router';
+import router from './router'
 
 import ApiService from './utils/ApiService'
 
@@ -22,11 +23,15 @@ export default {
       if(session.user){
         this.user.login(session.user)
       }
+      if(session.tasks){
+        this.tasks.setSessionTasks(session.tasks);
+      }
     })
   },
   data(){
     return {
       user: userState,
+      tasks: taskState,
     }
   },
   components: {

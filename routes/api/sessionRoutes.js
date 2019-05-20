@@ -24,9 +24,6 @@ router.post('/set', (req, res) => {
 });
 
 router.post('/get', (req, res) => {
-
-    console.log('api', req.sessionID, req.cookies);
-
     const session = {...req.session};
     delete session.cookie;
 
