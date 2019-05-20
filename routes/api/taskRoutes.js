@@ -39,6 +39,12 @@ router.post('/add', (req, res) => {
     });
 });
 
+router.post('/delete/:id_task', (req, res) => {
+    Task.delete(req.params.id_task).then(result => {
+        res.json({status: 'Success', message: "Task Deleted"});
+    })
+})
+
 router.get('/get/:id_task', (req, res) => {
 
     console.log('get task', req.params.id_task);

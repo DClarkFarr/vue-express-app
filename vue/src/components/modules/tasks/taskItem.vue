@@ -1,20 +1,20 @@
 <template>
     <div class="task-item d-flex w-100 px-3 py-2 mb-2 align-items-center">
         <div class="completed">
-            <div class="icon checkmark" :class="{checked: !!task.completed}" v-on:click="onComplete">
+            <div class="icon checkmark" :class="{checked: !!task.completed}" v-on:click="onToggleComplete">
                 <i class="fa" :class="{'fa-check-square-o': !!task.completed, 'fa-square-o': !task.completed}"></i>
             </div>
         </div>
         <div class="description">
             {{task.text}}
         </div>
-        <div class="created_by ml-auto align-self-start" v-if="task.author">
+        <div class="created_by align-self-start">
             <label>Author</label>
             <div>
                 By {{authoredBy.name}}
             </div>
         </div>
-        <div class="completed_by ml-auto align-self-start" v-if="task.completed">
+        <div class="completed_by align-self-start" v-if="task.completed">
             <label>Completed</label>
             <div>
                 By {{completedBy.name}}
@@ -24,7 +24,7 @@
             </div>
         </div>
         <div class="actions ml-auto">
-            <button class="btn btn-danger" v-if="canDelete"><i class="fa fa-times"></i></button>
+            <button class="btn btn-danger" v-if="canDelete" v-on:click="onDelete" :disabled="submitting"><i class="fa fa-times"></i></button>
         </div>
     </div>
 </template>
@@ -37,13 +37,19 @@ export default {
     },
     data(){
         return {
-
+            submitting: false,
         }
     },
     methods: {
-        onComplete(){
+        onToggleComplete(){
             //this.$root.task.completeTask()
         },
+        onDelete(){
+            this.submitting = true;
+            this.$root.tasks.deleteById(this.task.id).then(() => {
+                this.submitting = false;
+            });
+        }
     },
     computed: {
         canDelete(){
@@ -85,19 +91,21 @@ export default {
     .description {
         width: 200px;
         overflow: hidden;
-        white-space: nowrap;
         text-overflow: ellipsis;
     }
     .task-item  {
         background: #efefef;
     }
     .task-item > *:not(:last-child) {
-        margin-right: 5px;
+        margin-right: 10px;
     }
     .task-item > * > label {
         font-size: 0.75rem;
         opacity: 0.75;
         margin-bottom: 3px;
         margin-top: -5px;
+    }
+    .created_by {
+        min-width: 150px;
     }
 </style>

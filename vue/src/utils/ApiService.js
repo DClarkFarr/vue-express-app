@@ -55,17 +55,20 @@ export default {
     },
 
     getTasks(){
-        return this.get('tasks');
+        return this.get('tasks')
     },
     addTask(data){
-        return this.post('tasks/add', data);
+        return this.post('tasks/add', data)
+    },
+    deleteTask(taskId){
+        return this.post('tasks/delete/' + taskId)
     },
 
     getUserByEmail(email){
-        return this.get('users/by-email', {email: email});
+        return this.get('users/by-email', {email: email})
     },
     createUser(data){
-        return this.post('users/create', data);
+        return this.post('users/create', data)
     },
     sessionGet(){
         return this.post('session/get', {nothing: true})

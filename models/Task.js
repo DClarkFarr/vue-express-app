@@ -1,4 +1,5 @@
 const getDb = require('../utils/connection').getDb;
+const ObjectId = require('mongodb').ObjectId;
 
 const User = require('./User')
 
@@ -70,6 +71,13 @@ class Task {
         return tasks.map(t => {
             return (new Task).set(t)
         })
+    }
+
+    static delete(_id){
+        const db = getDb()
+
+        return db.collection('tasks')
+            .deleteOne({_id: ObjectId(_id) })
     }
 }
 

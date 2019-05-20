@@ -48,6 +48,17 @@ export default new Vue({
                     return result;
                 }
             })
+        },
+        deleteById(id){
+            var index = this.tasks.findIndex(t => {
+                return id == t.id
+            })
+
+            return ApiService.deleteTask(id).then(result => {
+                const tasks = [...this.tasks]
+                tasks.splice(index, 1)
+                this.tasks = tasks
+            });
         }
     }
 });
