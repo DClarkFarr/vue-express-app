@@ -27,7 +27,7 @@ class Model {
     }
     setId(){
         if(this._id){
-            this.id = this._id;
+            this.id = this._id.toString();
         }
         delete this._id;
     }

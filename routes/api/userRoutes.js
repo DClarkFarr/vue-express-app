@@ -11,6 +11,8 @@ router.get('/by-email', (req, res) => {
     instance.getCollection().findOne({email: req.query.email}).then(row => {
         if(row){
             instance.set(row).toObject().then(() => {
+                return instance.syncNeo();
+            }).then(() => {
                 res.json({user: instance})
             });
         }else{
@@ -33,7 +35,10 @@ router.post('/create', (req, res) => {
             email: req.body.email,
             name: req.body.name,
         }).then(user => {
-            res.json({user: user});
+            user.syncNeo().then((result) => {
+                console.log('result', result);
+                res.json({user: user});
+            })
         });
     })    
 })

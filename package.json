@@ -17,7 +17,8 @@
     "express-session": "^1.16.1",
     "htmling": "0.0.8",
     "mongodb": "^3.2.4",
-    "mongoose": "^5.5.8"
+    "mongoose": "^5.5.8",
+    "neode": "^0.2.15"
   },
   "devDependencies": {
     "nodemon": "^1.19.0"
