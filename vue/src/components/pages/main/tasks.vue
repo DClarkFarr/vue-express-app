@@ -2,7 +2,7 @@
   <div class="page page-main-home">
     <default-layout>
         <div class="container">
-            <h1>Home</h1>
+            <h1>Tasks</h1>
             <div v-if="tasks.length" class="home-tasks">
               <task-list :tasks="tasks"></task-list>
             </div>

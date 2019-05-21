@@ -2,7 +2,7 @@
   <div class="page page-main-home">
     <default-layout>
         <div class="container">
-            <h1>About</h1>
+            <h1>Categories</h1>
         </div>
     </default-layout>
   </div>

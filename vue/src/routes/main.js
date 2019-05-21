@@ -1,15 +1,15 @@
-import HomePage from '../components/pages/main/home';
-import AboutPage from '../components/pages/main/about';
+import TasksPage from '../components/pages/main/tasks';
+import CategoriesPage from '../components/pages/main/categories';
 import LoginPage from '../components/pages/main/login';
 
 export default [
     {
         path: '/',
-        component: HomePage,
+        component: TasksPage,
     },
     {
-        path: '/about',
-        component: AboutPage,
+        path: '/categories',
+        component: CategoriesPage,
     },
     {
         path: '/login',

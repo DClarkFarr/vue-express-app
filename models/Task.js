@@ -48,9 +48,7 @@ class Task extends Model {
     async inflate(){
         this.author = null;
         if(this.id_user){
-            await User.find(this.id_user).then(user => {
-                this.author = user;
-            });
+            this.author = await User.find(this.id_user)
         }        
 
         return this;
