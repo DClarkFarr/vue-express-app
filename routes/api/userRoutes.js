@@ -6,20 +6,27 @@ const getDb = require(root('utils/connection')).getDb;
 const User = require(root('models/User'));
 
 router.get('/by-email', (req, res) => {
-    const db = getDb();
-    db.collection('users').findOne({email: req.query.email}).then(row => {
-        const user = new User;
-        user.set(row);
-        
-        res.json({user: user})
+    const instance = new User;
+
+    instance.getCollection().findOne({email: req.query.email}).then(row => {
+        if(row){
+            instance.set(row).toObject().then(() => {
+                res.json({user: instance})
+            });
+        }else{
+            res.json({user: false})
+        } 
     })
 })
 
 router.post('/create', (req, res) => {
-    const db = getDb();
-    db.collection('users').findOne({email: req.body.email}).then(user => {
+    const instance = new User;
+
+    instance.getCollection().findOne({email: req.body.email}).then(user => {
         if(user){
-            res.json({user: user})
+            instance.set(user).toObject().then(() => {
+                res.json({user: user})
+            })
             return;
         }
         User.create({
