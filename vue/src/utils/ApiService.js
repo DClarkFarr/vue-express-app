@@ -92,5 +92,8 @@ export default {
     },
     addCategory(categoryName, id_user){
         return this.post('categories/add', {categoryName: categoryName, id_user: id_user})
+    },
+    deleteCategory(id_category, id_user){
+        return this.post('categories/delete/' + id_category, {id_user: id_user})
     }
 }

@@ -3,7 +3,6 @@ const Neode = require('neode')
 
 const instance = new Neode('bolt://localhost:7687', 'neo4j', 'password')
 
-
 instance.model('User', {
     id_user: {
         // primary: true,
@@ -21,7 +20,7 @@ instance.model('Category', {
         unique: true,
     }
 })
-instance.model('User').relationship('created', 'relationship', 'Created', 'out', 'Movie', null, true);
+instance.model('User').relationship('created', 'relationship', 'Created', 'out', 'Movie');
 instance.model('User').relationship('liked', 'relationship', 'Likes', 'out', 'Movie', {
     interactions: {
         type: 'number',
@@ -31,7 +30,7 @@ instance.model('User').relationship('liked', 'relationship', 'Likes', 'out', 'Mo
         type: 'number',
         default: 0,
     },
-}, true)
+})
 
 
 module.exports = instance;

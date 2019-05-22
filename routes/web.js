@@ -12,10 +12,10 @@ router.use(csrfProtection);
 router.use(viewMiddleware);
 router.use(sessionMiddleware());
 
-router.use((req, res, next) => {
-    console.log('hit web router: ' + (new Date).toString() );
-    next();
-});
+// router.use((req, res, next) => {
+//     console.log('hit web router: ' + (new Date).toString() );
+//     next();
+// });
 
 router.use((req, res, next) => {
     req.session.pageViews = (req.session.pageViews + 1) || 1;

@@ -15,6 +15,8 @@ export default new Vue({
                 created_at: null,
                 deleted: null,
                 logged: false,
+                createdCategories: [],
+                likedCategories: [],
             }
         },
         login(user, saveSession){
@@ -29,7 +31,16 @@ export default new Vue({
             ApiService.sessionClear()
         },
         getCategories(){
-            return ApiService.getUserCategories(this.id);
+            return ApiService.getUserCategories(this.id).then(result => {
+                if(result.status == 'success'){
+                    this.createdCategories = result.created;
+                    this.likedCategories = result.liked;
+
+                    this.$emit('user.categories.changed', [...this.createdCategories], [...this.likedCategories])
+                }
+
+                return result;
+            });
         }
     },
 });

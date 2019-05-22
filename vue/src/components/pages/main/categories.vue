@@ -4,7 +4,12 @@
         <div class="container">
             <h1>Categories</h1>
             <div class="categories-wrap d-flex flex-wrap justify-content-center">
-              <category-card v-for="category in categories" :category="category" :key="category._id"></category-card>
+              <category-card 
+                v-for="category in categories" 
+                :category="category" :key="category._id" 
+                :liked_ids="likedIds" 
+                :created_ids="createdIds"
+                v-on:categoryDeleted="onCategoryDeleted"></category-card>
             </div>
             <div class="alert alert-danger mt-3" v-if="error.length">
               {{error}}
@@ -47,9 +52,8 @@ export default {
     }
   },
   mounted(){
-    ApiService.getCategories().then(result => {
-      this.categories = result.categories;
-    })
+    this.getCategories();
+
     if(this.$root.user.id){
       this.getUserCategories()
     }else{
@@ -57,13 +61,24 @@ export default {
         this.getUserCategories()
       })
     }
+
+    this.$root.user.$on('user.categories.changed', (created, liked) => {
+      this.userCreated = created;
+      this.userLiked = liked;
+    })
   },
   methods: {
-    getUserCategories(){
-      this.$root.user.getCategories().then(result => {
-        this.userLiked = result.liked;
-        this.userCreated = result.created;
+    onCategoryDeleted(id_category){
+      console.log('deleted', id_category);
+      this.getCategories()
+    },
+    getCategories(){
+      return ApiService.getCategories().then(result => {
+        this.categories = result.categories;
       })
+    },
+    getUserCategories(){
+      this.$root.user.getCategories()
     },
     onAddCategory(){
       this.error = this.success = "";
@@ -85,6 +100,8 @@ export default {
         }else{
           this.error = result.message;
         }
+
+        this.getUserCategories();
 
         setTimeout(() => {
           this.error = '' 

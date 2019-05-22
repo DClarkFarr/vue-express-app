@@ -1,7 +1,7 @@
 <template>
     <div class="category card m-3">
         <div class="card-body">
-            <button v-if="isOwner" class="btn btn-danger btn-sm rounded-circle btnDelete">
+            <button v-if="isOwner" v-on:click="onDelete" class="btn btn-danger btn-sm rounded-circle btnDelete">
                 <i class="fa fa-times"></i>
             </button>
             <div class="card-title text-center">
@@ -22,10 +22,23 @@
 </template>
 
 <script>
+import ApiService from '../../../utils/ApiService'
+
 export default {
-    props: ['category'],
+    props: ['category', 'created_ids', 'liked_ids'],
     mounted(){
 
+    },
+    methods: {
+        onDelete(){
+            ApiService.deleteCategory(this.category._id, this.$root.user.id).then(result => {
+                if(result.status == 'success'){
+                    this.$emit('categoryDeleted', this.category._id)
+                }else{
+                    alert(result.message);
+                }
+            })
+        }
     },
     computed: {
         numLikes(){
@@ -35,7 +48,7 @@ export default {
             return this.numLikes > 0;
         },
         isOwner(){
-            return true
+            return this.created_ids.indexOf(this.category._id) > -1
         }
     }
 }

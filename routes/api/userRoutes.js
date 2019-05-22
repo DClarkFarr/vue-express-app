@@ -52,6 +52,7 @@ router.get('/categories', async (req, res) => {
         OPTIONAL MATCH (u)-[:Created]->(created)
         OPTIONAL MATCH (u)-[:Liked]->(liked)
         RETURN created, liked
+        ORDER BY created.name ASC, liked.name ASC
     `;
 
     const result = await neo.cypher(query);
