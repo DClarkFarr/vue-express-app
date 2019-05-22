@@ -21,8 +21,8 @@ instance.model('Category', {
         unique: true,
     }
 })
-instance.model('User').relationship('User', 'Created', 'out', 'Movie');
-instance.model('User').relationship('User', 'Likes', 'out', 'Movie', {
+instance.model('User').relationship('created', 'relationship', 'Created', 'out', 'Movie', null, true);
+instance.model('User').relationship('liked', 'relationship', 'Likes', 'out', 'Movie', {
     interactions: {
         type: 'number',
         default: 0,
@@ -31,7 +31,7 @@ instance.model('User').relationship('User', 'Likes', 'out', 'Movie', {
         type: 'number',
         default: 0,
     },
-})
+}, true)
 
 
 module.exports = instance;

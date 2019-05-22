@@ -55,6 +55,9 @@ router.use('/tasks', taskRoutes)
 const userRoutes = require('./api/userRoutes')
 router.use('/users', userRoutes)
 
+const categoryRoutes = require('./api/categoryRoutes')
+router.use('/categories', categoryRoutes);
+
 const sessionRoutes = require('./api/sessionRoutes')
 router.use('/session', sessionRoutes)
 

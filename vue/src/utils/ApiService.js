@@ -73,6 +73,10 @@ export default {
     createUser(data){
         return this.post('users/create', data)
     },
+    getUserCategories(id){
+        return this.get('users/categories', {id_user: id})
+    },
+
     sessionGet(){
         return this.post('session/get', {nothing: true})
     },
@@ -81,5 +85,12 @@ export default {
     },
     sessionClear(){
         return this.post('session/clear')
+    },
+
+    getCategories(){
+        return this.get('categories/all')
+    },
+    addCategory(categoryName, id_user){
+        return this.post('categories/add', {categoryName: categoryName, id_user: id_user})
     }
 }

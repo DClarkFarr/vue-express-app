@@ -26,18 +26,9 @@ class User extends Model{
         })
     }
     getNeo(){
-        neo.first('User', {id_user: this.id}).then(neoUser => {
-            console.log('neo user', neoUser);
-        })
+        return neo.first('User', {id_user: this.id})
     }
     async inflate(){
-        // if(!this.neoUser){
-        //     this.neoUser = await neo.first('User', {id_user: this.id}).then(node => {
-        //         return {labels: node.labels(), name: node.get('name'), id_user: node.get('id_user')}
-        //     })
-        //     console.log('neoUser', this.neoUser);     
-        // }
-
         return this;
     }
 }

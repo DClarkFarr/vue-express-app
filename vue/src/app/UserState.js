@@ -22,10 +22,14 @@ export default new Vue({
             if(saveSession){
                 ApiService.sessionSet({user: user});
             }
+            this.$emit('user.login')
         },
         logout(){
             Object.assign(this, {logged: false}, this.defaultData());
             ApiService.sessionClear()
+        },
+        getCategories(){
+            return ApiService.getUserCategories(this.id);
         }
     },
 });
