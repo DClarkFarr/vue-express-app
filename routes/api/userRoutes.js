@@ -50,7 +50,8 @@ router.get('/categories', async (req, res) => {
     //next steps 
     // 1) Rework to query created and liked separately
     // 2) Likes query needs to combine relationship.likes
-    
+    // 3  Make them into static async category methods
+
     const query = `
         MATCH (u:User) WHERE ID(u) = ${neoUser.id()}
         OPTIONAL MATCH (u)-[:Created]->(created)
