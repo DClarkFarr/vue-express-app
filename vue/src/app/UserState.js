@@ -29,6 +29,8 @@ export default new Vue({
         logout(){
             Object.assign(this, {logged: false}, this.defaultData());
             ApiService.sessionClear()
+
+            this.$emit('user.logout')
         },
         getCategories(){
             return ApiService.getUserCategories(this.id).then(result => {

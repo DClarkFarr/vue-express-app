@@ -28,7 +28,7 @@
 import ApiService from '../../../utils/ApiService'
 
 export default {
-    props: ['category', 'created_ids', 'liked_ids'],
+    props: ['category', 'created_ids', 'likes'],
     mounted(){
 
     },
@@ -48,7 +48,7 @@ export default {
     },
     computed: {
         numLikes(){
-            return 0
+            return this.likes[this.category._id] ? this.likes[this.category._id] : 0
         },
         isLiked(){
             return this.numLikes > 0;

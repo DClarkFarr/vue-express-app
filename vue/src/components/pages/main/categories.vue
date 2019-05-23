@@ -7,7 +7,7 @@
               <category-card 
                 v-for="category in categories" 
                 :category="category" :key="category._id" 
-                :liked_ids="likedIds" 
+                :likes="likes" 
                 :created_ids="createdIds"
                 v-on:categoryDeleted="onCategoryDeleted"
                 v-on:categoryAddLike="onCategoryAddLike"></category-card>
@@ -62,6 +62,11 @@ export default {
         this.getUserCategories()
       })
     }
+
+    this.$root.user.$on('user.logout', () => {
+      this.userCreated = [];
+      this.userLiked = [];
+    })
 
     this.$root.user.$on('user.categories.changed', (created, liked) => {
       this.userCreated = created;
@@ -120,10 +125,12 @@ export default {
     }
   },
   computed: {
-    likedIds(){
-      return this.userLiked.map(c => {
-        return c.id;
+    likes(){
+      let likes = {};
+      this.userLiked.forEach(c => {
+        likes[c.id] = c.likes;
       })
+      return likes;
     },
     createdIds(){
       return this.userCreated.map(c => {

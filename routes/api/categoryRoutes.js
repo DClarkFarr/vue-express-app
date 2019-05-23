@@ -79,7 +79,7 @@ router.post('/like/:id_category', async (req, res) => {
 
     var likeData = await Category.getUserLikes(neoUser, category)
 
-    if(likeData.likes && likeData.likes.likes > 5){
+    if(likeData.likes && likeData.likes.likes >= 5){
         await Category.resetUserLikes(neoUser, category)
         likeData = {likes: false}
     }else{
