@@ -75,7 +75,7 @@ export default {
         return this.error = "You must be logged in to add categories"
       }
       ApiService.addCategoryLike(id_category, this.$root.user.id).then(() => {
-        this.getCategories()
+        this.getUserCategories()
       });
     },
     onCategoryDeleted(id_category){

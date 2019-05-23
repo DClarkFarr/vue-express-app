@@ -55,27 +55,39 @@ router.get('/categories', async (req, res) => {
     const query = `
         MATCH (u:User) WHERE ID(u) = ${neoUser.id()}
         OPTIONAL MATCH (u)-[:Created]->(created)
-        OPTIONAL MATCH (u)-[:Liked]->(liked)
-        RETURN created, liked
+        OPTIONAL MATCH (u)-[l:Liked]->(liked)
+        RETURN created, liked, l
         ORDER BY created.name ASC, liked.name ASC
     `;
 
     const result = await neo.cypher(query);
     
-    var liked = [];
-    var created = [];
+    let liked = {};
+    let created = {};
 
     result.records.forEach(record => {
-        var obj = record.toObject()
+        let obj = record.toObject()
         if(obj.created){
-            created.push({id: obj.created.identity.low, ...obj.created.properties})
+            let createdId = parseInt(obj.created.identity.toString())
+            created[createdId] = {id: createdId, ...obj.created.properties}
         }
         if(obj.liked){
-            liked.push({id: obj.liked.identity.low, ...obj.liked.properties})
+            let likedId = parseInt(obj.liked.identity.toString())
+            liked[likedId] = Object.assign(
+                {id: likedId, ...obj.liked.properties},
+                {likes: parseInt(obj.l.properties.likes.toString()), interactions: parseInt(obj.l.properties.interactions.toString())}
+            )
+        
         }
     })
 
-    
+    created = Object.entries(created).map(pair => {
+        return pair[1]
+    })
+    liked = Object.entries(liked).map(pair => {
+        return pair[1]
+    })
+
     res.json({status: 'success', created: created, liked: liked})
 })
 
