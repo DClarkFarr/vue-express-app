@@ -43,6 +43,12 @@ router.post('/create', (req, res) => {
     })    
 })
 
+router.get('/all', (req, res) => {
+    User.all().then(users => {
+        res.json({status: 'success', users: users})
+    });
+})
+
 router.get('/categories', async (req, res) => {
     const user = await User.find(req.query.id_user);
     const neoUser = await user.getNeo();
@@ -89,6 +95,26 @@ router.get('/categories', async (req, res) => {
     })
 
     res.json({status: 'success', created: created, liked: liked})
+})
+
+router.get('/:id_user/suggestions', async (req, res) => {
+    const user = await User.find(req.params.id_user);
+    const neoUser = await user.getNeo();
+    neo.cypher(`
+        MATCH (t:User)-[tl:Liked]->(tlc:Category) WHERE id(t) = ${neoUser.id()}
+        MATCH (f:User)-[fl:Liked]->(tlc)
+        WITH f, count(tlc) AS countInCommon, sum(fl.likes) AS totalLikes
+        RETURN f, countInCommon, totalLikes,  (countInCommon * 2) + totalLikes as score
+        ORDER BY score DESC, countInCommon DESC, totalLikes DESC
+        LIMIT 5
+    `).then(result => {
+        let users = result.records.forEach(record => {
+            console.log('reccord', record)
+        })
+    })
+    
+
+    res.json({status: 'success', message: 'here goes nothing'})
 })
 
 module.exports = router;

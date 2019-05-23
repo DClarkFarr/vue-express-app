@@ -31,6 +31,11 @@ class User extends Model{
     async inflate(){
         return this;
     }
+    static all(where){
+        return super.all(where).sort({name: 1}).sort({name: 1}).toArray().then(rows => {
+            return super.collect(rows)
+        })
+    }
 }
 
 

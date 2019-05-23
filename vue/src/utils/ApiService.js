@@ -76,6 +76,12 @@ export default {
     getUserCategories(id){
         return this.get('users/categories', {id_user: id})
     },
+    getUsers(){
+        return this.get('users/all')
+    },
+    getUserSuggestions(id){
+        return this.get('users/' + id + '/suggestions')
+    },
 
     sessionGet(){
         return this.post('session/get', {nothing: true})

@@ -7,6 +7,9 @@
             <router-link class="nav-link" to="/categories">Categories</router-link>
         </li>
         <li class="nav-item">
+            <router-link class="nav-link" to="/friends">Friends</router-link>
+        </li>
+        <li class="nav-item">
             <router-link class="nav-link" to="/login">Login</router-link>
         </li>
     </ul>

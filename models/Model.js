@@ -162,6 +162,10 @@ class Model {
             return false;
         });
     }
+    static all(where){
+        const obj = new this;
+        return obj.getCollection().find(where)
+    }
 }
 
 module.exports = Model;

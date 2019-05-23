@@ -54,7 +54,7 @@ export default {
   },
   mounted(){
     this.getCategories();
-
+    
     if(this.$root.user.id){
       this.getUserCategories()
     }else{

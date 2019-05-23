@@ -17,6 +17,8 @@ export default new Vue({
                 logged: false,
                 createdCategories: [],
                 likedCategories: [],
+                users: [],
+                suggestions: [],
             }
         },
         login(user, saveSession){
@@ -32,6 +34,14 @@ export default new Vue({
 
             this.$emit('user.logout')
         },
+        getUsers(){
+            return ApiService.getUsers().then(result => {
+                if(result.status == 'success'){
+                    this.users = result.users
+                }
+                return [...result.users] || []
+            })
+        },
         getCategories(){
             return ApiService.getUserCategories(this.id).then(result => {
                 if(result.status == 'success'){
@@ -43,6 +53,13 @@ export default new Vue({
 
                 return result;
             });
+        },
+        getSuggestions(){
+            ApiService.getUserSuggestions(this.id).then(result => {
+
+
+                return result.users;
+            })
         }
     },
 });
