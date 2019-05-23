@@ -47,6 +47,10 @@ router.get('/categories', async (req, res) => {
     const user = await User.find(req.query.id_user);
     const neoUser = await user.getNeo();
 
+    //next steps 
+    // 1) Rework to query created and liked separately
+    // 2) Likes query needs to combine relationship.likes
+    
     const query = `
         MATCH (u:User) WHERE ID(u) = ${neoUser.id()}
         OPTIONAL MATCH (u)-[:Created]->(created)

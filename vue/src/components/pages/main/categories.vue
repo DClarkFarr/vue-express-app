@@ -9,7 +9,8 @@
                 :category="category" :key="category._id" 
                 :liked_ids="likedIds" 
                 :created_ids="createdIds"
-                v-on:categoryDeleted="onCategoryDeleted"></category-card>
+                v-on:categoryDeleted="onCategoryDeleted"
+                v-on:categoryAddLike="onCategoryAddLike"></category-card>
             </div>
             <div class="alert alert-danger mt-3" v-if="error.length">
               {{error}}
@@ -68,8 +69,16 @@ export default {
     })
   },
   methods: {
+    onCategoryAddLike(id_category){
+      this.error = "";
+      if(!this.$root.user.id){
+        return this.error = "You must be logged in to add categories"
+      }
+      ApiService.addCategoryLike(id_category, this.$root.user.id).then(() => {
+        this.getCategories()
+      });
+    },
     onCategoryDeleted(id_category){
-      console.log('deleted', id_category);
       this.getCategories()
     },
     getCategories(){

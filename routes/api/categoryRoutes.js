@@ -60,8 +60,36 @@ router.post('/delete/:id_category', async (req, res) => {
     }).catch(err => {
         res.json({status: 'failed', message: err.message})
     })
+})
 
-    
+router.post('/like/:id_category', async (req, res) => {
+    const instance = new Category;
+    const neo = instance.getNeo();
+
+    const user = await User.find(req.body.id_user)
+    if(!user || !user.id){
+        return res.json({status: 'failed', message: 'User not found'})
+    }
+    const neoUser = await user.getNeo()
+    const category = await neo.findById('Category', req.params.id_category)
+
+    if(!category){
+        return res.json({status: 'failed', message: 'Category not found'})
+    }
+
+    var likeData = await Category.getUserLikes(neoUser, category)
+
+    if(likeData.likes && likeData.likes.likes > 5){
+        await Category.resetUserLikes(neoUser, category)
+        likeData = {likes: false}
+    }else{
+        likeData = await Category.addUserLikes(neoUser, category);
+        console.log('likeData', likeData)
+    }
+
+    likeData = await Category.getUserLikes(neoUser, category)
+
+    res.json({status: 'success', message: 'Temp add', likes: likeData.likes ? likeData.likes.likes : 0, neoUserId: neoUser.id(), neoCatId: category.id()})
 })
 
 

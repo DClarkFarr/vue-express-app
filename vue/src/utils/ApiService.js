@@ -95,5 +95,8 @@ export default {
     },
     deleteCategory(id_category, id_user){
         return this.post('categories/delete/' + id_category, {id_user: id_user})
+    },
+    addCategoryLike(id_category, id_user){
+        return this.post('categories/like/' + id_category, {id_user: id_user})
     }
 }

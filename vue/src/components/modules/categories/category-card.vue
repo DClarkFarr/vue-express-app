@@ -8,7 +8,10 @@
                 {{category.name}}
             </div>
             <div class="text-center">
-                <a href="javascript:void(0)" class="like-icon" :class="{liked: isLiked}">
+                <a href="javascript:void(0)" 
+                    class="like-icon" 
+                    :class="{liked: isLiked}"
+                    v-on:click="onAddLike">
                     <span class="d-inline-block icon">
                         <i class="fa fa-heart"></i>
                     </span>
@@ -38,6 +41,9 @@ export default {
                     alert(result.message);
                 }
             })
+        },
+        onAddLike(){
+            this.$emit('categoryAddLike', this.category._id)
         }
     },
     computed: {
