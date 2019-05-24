@@ -103,18 +103,28 @@ router.get('/:id_user/suggestions', async (req, res) => {
     neo.cypher(`
         MATCH (t:User)-[tl:Liked]->(tlc:Category) WHERE id(t) = ${neoUser.id()}
         MATCH (f:User)-[fl:Liked]->(tlc)
-        WITH f, count(tlc) AS countInCommon, sum(fl.likes) AS totalLikes
+        WHERE NOT f = t
+        WITH f, count(fl) AS countInCommon, sum(fl.likes) AS totalLikes
         RETURN f, countInCommon, totalLikes,  (countInCommon * 2) + totalLikes as score
         ORDER BY score DESC, countInCommon DESC, totalLikes DESC
         LIMIT 5
     `).then(result => {
-        let users = result.records.forEach(record => {
-            console.log('reccord', record)
+        let suggestions = result.records.map(record => {
+            
+            return {
+                id_node: parseInt(record.get('f').identity.toString()),
+                name: record.get('f').properties.name,
+                id_user: record.get('f').properties.id_user, 
+                countInCommon: parseInt(record.get('countInCommon').toString()),
+                totalLikes: parseInt(record.get('totalLikes').toString()),
+                score: parseInt(record.get('score').toString())
+            }
         })
+        res.json({status: 'success', suggestions: suggestions})
     })
     
 
-    res.json({status: 'success', message: 'here goes nothing'})
+    
 })
 
 module.exports = router;

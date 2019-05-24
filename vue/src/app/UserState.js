@@ -55,10 +55,8 @@ export default new Vue({
             });
         },
         getSuggestions(){
-            ApiService.getUserSuggestions(this.id).then(result => {
-
-
-                return result.users;
+            return ApiService.getUserSuggestions(this.id).then(result => {
+                return result.suggestions;
             })
         }
     },

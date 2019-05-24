@@ -12,7 +12,11 @@
                 </div>
                 <div class="card-body">
                     <div v-if="users.length">
-                      <friend-item  v-for="user in users" :friend="user" :key="user.id"></friend-item>
+                      <friend-item  v-for="user in users" :friend="user" :key="user.id">
+                        <div class="ml-auto actions" slot="actions">
+                          <status-button :friend="user"></status-button>
+                        </div>
+                      </friend-item>
                     </div>
                     <div v-else>
                       <div class="bg-white p3">
@@ -30,7 +34,17 @@
                 <div class="card-body">
                   <div v-if="logged">
                     <div v-if="suggestions.length">
-                      suggestions loop
+                      <friend-item class="text-dark" v-for="sug in suggestions" :friend="sug" :key="sug.id">
+                        <div slot="actions">
+                          <div class="stat text-center mr-3">
+                            <span class="badge badge-secondary d-inline-block mr-1">{{sug.countInCommon}}</span>
+                            <small class="text-muted">in common</small>
+                          </div>
+                        </div>
+                        <div slot="actions" class="ml-auto">
+                          <status-button :friend="sug"></status-button>
+                        </div>
+                      </friend-item>
                     </div>
                     <div v-else>
                       No suggestions. Make sure to "like" categories that interest you.
@@ -69,7 +83,7 @@
 <script>
 import defaultLayout from '../../layouts/default';
 import friendItem from '../../modules/friends/friend-item'
-
+import statusButton from '../../modules/friends/status-button'
 export default {
   name: 'page-main-friends',
   data(){
@@ -114,6 +128,7 @@ export default {
   components: {
     defaultLayout, 
     friendItem,
+    statusButton,
   }
 }
 </script>

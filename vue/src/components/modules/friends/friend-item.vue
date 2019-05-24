@@ -3,11 +3,13 @@
         <div class="name mr-3">
             {{friend.name}}
         </div>
-        <div class="actions ml-auto">
-            <slot name="actions">
+        
+        <slot name="actions">
+            <div class="actions ml-auto">
                 No Button here
-            </slot>
-        </div>
+            </div>
+        </slot>
+       
     </div>
 </template>
 
