@@ -8,8 +8,8 @@ class Model {
      */
     schema(){
         return {
-            source:     '',
-            exclude:    [],
+            source:  '',
+            exclude: [],
             inflate: [],
             fields: {
                 
@@ -21,6 +21,7 @@ class Model {
      * Automatic methods
      */
     constructor(data){
+        this.set( this.getDefaults() )
         if(data){
             this.set(data)
         }

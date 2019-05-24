@@ -82,6 +82,12 @@ export default {
     getUserSuggestions(id){
         return this.get('users/' + id + '/suggestions')
     },
+    addUserFriend(id_user, id_friend){
+        return this.post('users/' + id_user + '/addFriend', {id_friend: id_friend})
+    },
+    removeUserFriend(id_user, id_friend){
+        return this.post('users/' + id_user + '/removeFriend', {id_friend: id_friend})
+    },
 
     sessionGet(){
         return this.post('session/get', {nothing: true})

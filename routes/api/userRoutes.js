@@ -108,23 +108,60 @@ router.get('/:id_user/suggestions', async (req, res) => {
         RETURN f, countInCommon, totalLikes,  (countInCommon * 2) + totalLikes as score
         ORDER BY score DESC, countInCommon DESC, totalLikes DESC
         LIMIT 5
-    `).then(result => {
-        let suggestions = result.records.map(record => {
-            
-            return {
-                id_node: parseInt(record.get('f').identity.toString()),
-                name: record.get('f').properties.name,
-                id_user: record.get('f').properties.id_user, 
-                countInCommon: parseInt(record.get('countInCommon').toString()),
-                totalLikes: parseInt(record.get('totalLikes').toString()),
-                score: parseInt(record.get('score').toString())
-            }
-        })
-        res.json({status: 'success', suggestions: suggestions})
-    })
-    
+    `).then((result) => {
+        Promise.all(
+            result.records.map( async (record) => {
+                let id_user = record.get('f').properties.id_user,
+                    countInCommon = parseInt(record.get('countInCommon').toString()),
+                    suggestion;
 
-    
+                suggestion = await User.find(id_user)
+                suggestion.countInCommon = countInCommon;
+                
+                return suggestion;
+            })
+        ).then(suggestions => {
+            res.json({status: 'success', suggestions: suggestions})
+        })
+    })
+})
+
+router.post('/:id_user/addFriend', async (req, res) => {
+    let user = await User.find(req.params.id_user),
+        id_friend = req.body.id_friend,
+        message = 'friend added';
+
+    if(!user){
+        return res.json({status: 'failed', message: 'user not found'})
+    }
+
+    if(user.friend_ids.indexOf(id_friend) < 0){
+        user.friend_ids.push(id_friend)
+        await user.save()
+    }else{
+        message = 'friend already added'
+    }
+
+    res.json({status: 'success', message: message, user: user})
+})
+router.post('/:id_user/removeFriend', async (req, res) => {
+    let user = await User.find(req.params.id_user),
+        id_friend = req.body.id_friend,
+        message = 'friend removed',
+        index = user.friend_ids.indexOf(id_friend);
+
+    if(!user){
+        return res.json({status: 'failed', message: 'user not found'})
+    }
+
+    if(index > -1){
+        user.friend_ids.splice(index,1)
+        await user.save()
+    }else{
+        message = 'friend already removed'
+    }
+
+    res.json({status: 'success', message: message, user: user})
 })
 
 module.exports = router;

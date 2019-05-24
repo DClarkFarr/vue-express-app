@@ -14,6 +14,7 @@ export default new Vue({
                 name: null,
                 created_at: null,
                 deleted: null,
+                friend_ids: [],
                 logged: false,
                 createdCategories: [],
                 likedCategories: [],
@@ -57,6 +58,18 @@ export default new Vue({
         getSuggestions(){
             return ApiService.getUserSuggestions(this.id).then(result => {
                 return result.suggestions;
+            })
+        },
+        addFriend(id_friend){
+            return ApiService.addUserFriend(this.id, id_friend).then(result => {
+                this.friend_ids = result.user.friend_ids
+                return result;
+            })
+        },
+        unfriend(id_friend){
+            return ApiService.removeUserFriend(this.id, id_friend).then(result => {
+                this.friend_ids = result.user.friend_ids
+                return result
             })
         }
     },

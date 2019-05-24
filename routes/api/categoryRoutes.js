@@ -84,7 +84,6 @@ router.post('/like/:id_category', async (req, res) => {
         likeData = {likes: false}
     }else{
         likeData = await Category.addUserLikes(neoUser, category);
-        console.log('likeData', likeData)
     }
 
     likeData = await Category.getUserLikes(neoUser, category)

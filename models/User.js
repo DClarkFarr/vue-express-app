@@ -16,6 +16,7 @@ class User extends Model{
                 email: '',
                 active: 1,
                 created_at: (new Date()).toISOString(),
+                friend_ids: [],
             },
         }
     }
