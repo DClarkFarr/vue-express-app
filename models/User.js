@@ -10,7 +10,7 @@ class User extends Model{
         return {
             source:  'users',
             exclude: [],
-            inflate: [],
+            inflate: ['friends'],
             fields: {
                 name: '',
                 email: '',
@@ -30,6 +30,13 @@ class User extends Model{
         return neo.first('User', {id_user: this.id})
     }
     async inflate(){
+        if(!this.friends){
+            this.friends = await Promise.all(
+                this.friend_ids.map((id_friend) => {
+                    return User.find(id_friend)
+                })
+            )
+        }
         return this;
     }
     static all(where){

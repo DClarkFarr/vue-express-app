@@ -101,7 +101,7 @@ export default {
       this.success = "Login successful!"
       setTimeout(() => {
         this.$router.push('/');
-      }, 1500);
+      }, 500);
     }
   },
   components: {

@@ -62,7 +62,16 @@
                 </div>
                 <div class="card-body">
                   <div v-if="logged">
-
+                    <div v-if="suggestions.length">
+                      <friend-item class="text-dark" v-for="friend in friends" :friend="friend" :key="friend.id">
+                        <div slot="actions" class="ml-auto">
+                          <status-button :friend="friend"></status-button>
+                        </div>
+                      </friend-item>
+                    </div>
+                    <div v-else>
+                      No friends. Add a few!
+                    </div>
                   </div>
                   <div v-else>
                     Login to view friends
@@ -108,6 +117,7 @@ export default {
 
     this.$root.user.$on('user.logout', () => {
       this.suggestions = [];
+      this.logged = false;
     })
   },
   methods: {
@@ -120,6 +130,11 @@ export default {
       this.$root.user.getUsers().then(users => {
         this.users = users
       })
+    }
+  },
+  computed: {
+    friends(){
+      return this.$root.user.friends || []
     }
   },
   watch: {
