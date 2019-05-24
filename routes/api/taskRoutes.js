@@ -59,10 +59,7 @@ router.post('/toggleCompleted/:id_task', (req, res) => {
     })
 })
 
-router.get('/get/:id_task', (req, res) => {
-
-    console.log('get task', req.params.id_task);
-    
+router.get('/get/:id_task', (req, res) => {    
     res.send('get task ' + req.params.id_task);
 });
 
