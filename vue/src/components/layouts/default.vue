@@ -3,7 +3,11 @@
         <default-header>
             <default-menu-links></default-menu-links>
             <ul v-if="userLogged" class="navbar-nav align-items-center ml-auto">
-                <li class="nav-item mr-3"><small>Welcome, {{userName}}</small></li>
+                <li class="nav-item mr-3">
+                    <router-link to="/me/profile">
+                        <small>Welcome, {{userName}}</small>
+                    </router-link>
+                </li>
                 <li class="nav-item">
                     <a v-on:click.prevent="logout" class="nav-link" href="#">Logout</a>
                 </li>
