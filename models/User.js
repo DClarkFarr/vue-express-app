@@ -14,6 +14,7 @@ class User extends Model{
             fields: {
                 name: '',
                 email: '',
+                image: '',
                 active: 1,
                 created_at: (new Date()).toISOString(),
                 friend_ids: [],

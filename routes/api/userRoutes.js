@@ -6,6 +6,11 @@ const getDb = require(root('utils/connection')).getDb;
 const User = require(root('models/User'));
 const neo = require('../../utils/neode')
 
+router.post('/update', (req, res) => {
+
+    res.json({status: 'success', message: 'didnt do anything'})
+})
+
 router.get('/by-email', (req, res) => {
     const instance = new User;
 

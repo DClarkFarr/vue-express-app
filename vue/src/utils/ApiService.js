@@ -53,6 +53,27 @@ export default {
             return err.response.data || {status: 'failed', message: err.message}
         })
     },
+    upload(url, data, config){
+        url = this.getUrl(url);
+        if(!config){
+            config = {
+                headers: {},
+            };
+        }
+        config.headers = Object.assign({}, {'Content-Type': 'multipart/form-data'}, config.headers)
+
+        let formData = new FormData;
+
+        Object.entries(data).forEach(entry => {
+            formData.append(entry[0], entry[1]);
+        })
+        
+        return axios.post(url, formData, config).then(result => {
+            return result.data;
+        }).catch(err => {
+            return err.response.data || {status: 'failed', message: err.message}
+        })
+    },
 
     getTasks(){
         return this.get('tasks')
@@ -72,6 +93,9 @@ export default {
     },
     createUser(data){
         return this.post('users/create', data)
+    },
+    updateUser(data){
+        return this.upload('users/update', data)
     },
     getUserCategories(id){
         return this.get('users/categories', {id_user: id})

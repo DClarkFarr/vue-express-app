@@ -43,6 +43,17 @@ export default new Vue({
                 return [...result.users] || []
             })
         },
+        update(data){
+            if(!this.id){
+                return Promise.reject('User not logged in');
+            }
+
+            return ApiService.updateUser(data).then(result => {
+                console.log('result', result);
+
+                return result;
+            })
+        },
         getCategories(){
             return ApiService.getUserCategories(this.id).then(result => {
                 if(result.status == 'success'){
