@@ -25,7 +25,7 @@ export default new Vue({
         login(user, saveSession){
             Object.assign(this, user, {logged: true});
             if(saveSession){
-                ApiService.sessionSet({user: user});
+                ApiService.sessionSet({user_id: user.id});
             }
             this.$emit('user.login')
         },
@@ -48,8 +48,13 @@ export default new Vue({
                 return Promise.reject('User not logged in');
             }
 
-            return ApiService.updateUser(data).then(result => {
-                console.log('result', result);
+            return ApiService.updateUser(this.id, data).then(result => {
+                Object.entries(data).forEach(entry => {
+                    if(entry[0] == 'file'){
+                        entry[0] = 'image';
+                    }
+                    this[entry[0]] = result.user[entry[0]]
+                })
 
                 return result;
             })

@@ -94,8 +94,8 @@ export default {
     createUser(data){
         return this.post('users/create', data)
     },
-    updateUser(data){
-        return this.upload('users/update', data)
+    updateUser(id, data){
+        return this.upload('users/'+ id +'/update', data)
     },
     getUserCategories(id){
         return this.get('users/categories', {id_user: id})

@@ -17,7 +17,7 @@
                     
                     <div class="col-lg-4">
                         <div class="p-2">
-                            <img v-if="user.image" src="" alt="" class="img-fluid">
+                            <img v-if="user.image" :src="userImage" alt="" class="img-fluid">
                             <div v-else class="text-center">
                                 No Image
                             </div>
@@ -65,13 +65,30 @@ export default {
             })
         },
         onSubmit(){
-            
-            this.$root.user.update({
+            var post = {
                 name: this.user.name,
-                email: this.user.email,
-                file: this.$refs.file.files[0],
+                email: this.user.email, 
+            };
+            if(this.$refs.file.files.length){
+                post.file = this.$refs.file.files[0];
+            }
+            this.$root.user.update(post).then( (result) => {
+                console.log('result', result.user.image, 'vs', this.$root.user.image)
+
+                this.setUser()
             });
         },
+    },
+    computed: {
+        userImage(){
+            var image = this.user.image;
+
+            if(window.location.host == 'localhost:8080'){
+                image = 'http://localhost:3333' + this.user.image;
+            }
+
+            return image;
+        }
     },
     watch: {
         '$root.user.id': function(newid, oldid){

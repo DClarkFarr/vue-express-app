@@ -4,11 +4,25 @@ const router = express.Router();
 const root = require('../../utils/root');
 const getDb = require(root('utils/connection')).getDb;
 const User = require(root('models/User'));
-const neo = require('../../utils/neode')
+const neo = require('../../utils/neode');
 
-router.post('/update', (req, res) => {
+const uploadMiddleware = require('../../utils/middleware/upload')
+const profileUploadMiddleware = uploadMiddleware({destination: 'public/images', prefix: 'profile-'}).single('file');
 
-    res.json({status: 'success', message: 'didnt do anything'})
+router.post('/:id_user/update', profileUploadMiddleware, async (req, res) => {
+
+    const user = await User.find(req.params.id_user);
+
+    user.set(req.body);
+    if(req.file){
+        user.set({
+            image: '/images/' + req.file.filename,
+        });
+    }
+
+    user.save().then( async () => {
+        res.json({status: 'success', user: await user.toObject()})
+    })
 })
 
 router.get('/by-email', (req, res) => {

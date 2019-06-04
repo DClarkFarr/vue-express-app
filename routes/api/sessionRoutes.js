@@ -11,21 +11,10 @@ router.use(sessionMiddleware())
 
 router.use((req, res, next) => {
     if(req.cookies.user_session && !(req.session.user && req.session.user.id)){
-        User.find(req.cookies.user_session).then( async (user) => {
-            if(!user){
-                return next()
-            }
-
-            req.session.user = Object.assign({}, req.session.user, await user.toObject());
-
-            req.session.save(() => {
-                next()
-            });
-        })
-    }else{
-        next();
+        req.session.user_id = req.cookies.user_session
     }
-   
+    
+    next()
 })
 
 router.post('/set', (req, res) => {
@@ -36,7 +25,11 @@ router.post('/set', (req, res) => {
     const session = {...req.session};
     delete session.cookie;
 
-    res.cookie('user_session', session.user.id)
+    if(session.user_id){
+        res.cookie('user_session', session.user_id)
+    }else{
+        res.clearCookie('user_session')
+    }
 
     req.session.save(() =>{
         res.json({session: session})
@@ -44,9 +37,20 @@ router.post('/set', (req, res) => {
     
 });
 
-router.post('/get', (req, res) => {
+router.post('/get', async (req, res) => {
     const session = {...req.session};
     delete session.cookie;
+
+    if(!session.user){
+        session.user = false
+    }
+
+    if(session.user_id){
+        session.user = await User.find(session.user_id).then(user => {
+            return user.toObject()
+        })
+        delete session.user_id
+    }
 
     res.json({session: session})
 });

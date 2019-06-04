@@ -12,15 +12,15 @@ function toFilename(filename){
     return filename + ext;
 }
 
-export default function(options){
+module.exports = function(options){
     if(!options){
         options = {};
     }
     options = Object.assign({
-        key: 'file',
         destination: 'files',
+        prefix: 'upload-',
         filename: function(req, file){
-            return 'upload-' + (new Date().toISOString()) + '-' + toFilename(file.originalname)
+            return this.prefix + (new Date().toISOString()) + '-' + toFilename(file.originalname)
         },
         mimeTypes: [],
     }, options);
@@ -45,7 +45,7 @@ export default function(options){
         }
     }
 
-    return multer({storage: fileStorage, fileFilter: fileFilter}).single('image')
+    return multer({storage: fileStorage, fileFilter: fileFilter})
 }
 /**
  * Example usage

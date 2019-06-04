@@ -13,7 +13,7 @@ app.set('views', 'views');
 app.set('trust proxy', 1) // trust first proxy
 
 app.use(express.static( path.join(__dirname, 'public') ));
-app.use('/images', express.static( path.join(__dirname, 'public', 'images') ));
+app.use('/images', express.static( path.join(__dirname, 'images') ));
 app.engine('html', HTMLing.express(__dirname + '/views/', {watch: true}));
 
 app.use(bodyParser.json());
