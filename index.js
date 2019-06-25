@@ -1,7 +1,9 @@
 const express = require('express');
 const app = express();
+const server = require('http').createServer(app);
 const port = 3333;
 const path = require('path');
+const io = require('socket.io')(server);
 
 const bodyParser = require('body-parser');
 const HTMLing = require('htmling');
@@ -28,11 +30,32 @@ app.use('/api', apiRouter);
 app.use(webRouter);
 
 /**
+ * General socket connection
+ */
+// io.on('connection', function(socket){
+//     console.log('a user connected', socket);
+//     socket.on('disconnect', function(){
+//         console.log('user disconnected');
+//     });
+// });
+
+/**
+ * Tasks-Specific connection
+ */
+
+const tasksSocket = io.of('/tasks').on('connection', function(socket){
+    console.log('connected to tasks')
+    socket.on('disconnect', function(){
+        console.log('disconnected from tasks');
+    });
+})
+
+/**
  * First start mongo
  *  $ mongod --config /usr/local/etc/mongod.conf
  */
 Connection.connect(() => {
-    app.listen(port, () => {
+    server.listen(port, () => {
         console.log(`listeneinng on port ${port}!`)
     });
 });

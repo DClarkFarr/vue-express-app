@@ -25,6 +25,8 @@ import defaultLayout from '../../layouts/default';
 import TaskList from '../../modules/tasks/taskList'
 import TaskCreateForm from '../../modules/tasks/createForm'
 
+import Socket from '../../../utils/Socket'
+
 export default {
   name: 'page-main-home',
   data(){
@@ -36,6 +38,21 @@ export default {
     this.$root.tasks.getTasks().then((tasks) => {
       this.tasks = tasks;
     });
+
+    this.tasksSocket = Socket.getConnection('tasks').on('connect', () => {
+      
+    });
+    // var tasksSocket2 = Socket.getConnection('tasks').on('connect', () => {
+    //   console.log('connected socket 2')
+    // });
+
+    console.log(this.tasksSocket)
+
+  },
+  beforeDestroy() {
+    this.tasksSocket.close()
+
+    console.log('after destroy', this.tasksSocket)
   },
   watch: {
     '$root.tasks.tasks': function(tasks){
