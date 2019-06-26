@@ -17,7 +17,7 @@ export default {
         if(this.connections[key]){
             var c = this.connections[key];
             if(c.disconnected || !c.connected){
-                console.log('trying to connect')
+               // console.log('trying to connect')
                 c.connect();
             }
             return c;
@@ -27,8 +27,15 @@ export default {
     },
     connect(slug){
         slug = this.slugToSlug(slug)
-        console.log('connecting to', baseurl + (slug.length ? '/' + slug : ''))
+        //console.log('connecting to', baseurl + (slug.length ? '/' + slug : ''))
         return io.connect(baseurl + (slug.length ? '/' + slug : ''))
+    },
+    destroy(slug){
+        slug = this.slugToSlug(slug)
+        if(this.connections[slug]){
+            this.connections[slug].destroy();
+            delete this.connections[slug];
+        }
     },
     slugToSlug(slug){
         return (slug || '').replace(/^\//, '');

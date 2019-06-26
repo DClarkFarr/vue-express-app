@@ -1,25 +1,43 @@
 import Vue from 'vue';
 import ApiService from '../utils/ApiService';
 
+import Socket from '../utils/Socket'
+
 export default new Vue({
     data(){
         return this.defaultData()
     },
 
     methods: {
+        openSocket(){
+            return this.socket = Socket.getConnection('tasks').on('connect', () => {
+                console.log("connected");
+                this.socket.on('tasks.updated', (result) => {
+                    console.log('tasks.updated', result);
+                })
+            })
+        },
+        closeSocket(){
+            if(this.socket){
+                Socket.destroy('tasks');
+            }
+            this.socket = false;
+        },
         defaultData(){
             return  {
                 tasks: [],
                 sessionTaskIds: [],
+                socket: false,
             }
         },
+
         setSessionTasks(tasks){
             this.sessionTaskIds = tasks.map(task => {
                 return task._id;
             })
         },
-        getTasks(){
-            if(this.tasks.length){
+        getTasks(force){
+            if(this.tasks.length && !force){
                 return Promise.resolve([...this.tasks]);
             }
             return ApiService.getTasks().then(tasks => {
@@ -43,6 +61,7 @@ export default new Vue({
                 if(result.status == 'success'){
                     this.tasks.push({...result.task});
                     this.$emit('task.added', [...this.tasks]);
+                    this.$emit('tasks.updated', [...this.tasks]);
                     return result;
                 }else{
                     return result;
@@ -57,7 +76,9 @@ export default new Vue({
             return ApiService.deleteTask(id).then(() => {
                 const tasks = [...this.tasks]
                 tasks.splice(index, 1)
-                this.tasks = tasks
+                this.tasks = tasks;
+                this.$emit('task.deleted', [...this.tasks]);
+                this.$emit('tasks.updated', [...this.tasks]);
             });
         },
         toggleCompleted(id, userData){
@@ -70,6 +91,9 @@ export default new Vue({
                     task.completed = result.task.completed
                     task.completed_by = result.task.completed_by
                     task.completed_at = result.task.completed_at
+
+                    this.$emit('task.toggled', [...this.tasks]);
+                    this.$emit('tasks.updated', [...this.tasks]);
                 }
             });
         }

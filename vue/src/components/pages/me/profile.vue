@@ -83,7 +83,7 @@ export default {
         userImage(){
             var image = this.user.image;
 
-            if(window.location.host == 'localhost:8080'){
+            if(window.location.host.indexOf('localhost:') > -1){
                 image = 'http://localhost:3333' + this.user.image;
             }
 

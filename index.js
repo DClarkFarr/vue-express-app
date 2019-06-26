@@ -44,7 +44,11 @@ app.use(webRouter);
  */
 
 const tasksSocket = io.of('/tasks').on('connection', function(socket){
-    console.log('connected to tasks')
+    console.log('connected to tasks');
+    socket.on('tasks.updated', (body) => {
+        console.log('tasks.updated', body);
+        socket.broadcast.emit('tasks.updated', body);
+    })
     socket.on('disconnect', function(){
         console.log('disconnected from tasks');
     });
