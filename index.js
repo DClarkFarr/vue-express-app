@@ -1,14 +1,16 @@
 const express = require('express');
-const app = express();
-const server = require('http').createServer(app);
+
+const app = require('./utils/app').app;
+const server = require('./utils/app').server;
+
 const port = 3333;
 const path = require('path');
-const io = require('socket.io')(server);
 
 const bodyParser = require('body-parser');
 const HTMLing = require('htmling');
 const cookieParser = require('cookie-parser');
 const Connection = require('./utils/connection').Connection;
+const Socket = require('./utils/socket');
 
 app.set('view engine', 'html');
 app.set('views', 'views');
@@ -30,24 +32,18 @@ app.use('/api', apiRouter);
 app.use(webRouter);
 
 /**
- * General socket connection
- */
-// io.on('connection', function(socket){
-//     console.log('a user connected', socket);
-//     socket.on('disconnect', function(){
-//         console.log('user disconnected');
-//     });
-// });
-
-/**
  * Tasks-Specific connection
  */
-
-const tasksSocket = io.of('/tasks').on('connection', function(socket){
-    console.log('connected to tasks');
-    socket.on('tasks.updated', (body) => {
-        console.log('tasks.updated', body);
-        socket.broadcast.emit('tasks.updated', body);
+Socket.get().of('/tasks').on('connection', function(socket){
+    console.log('socket here');
+    socket.on('updated', (task) => {
+        socket.emit('updated', task);
+    })
+    socket.on('created', (task) => {
+        socket.emit('created', task);
+    })
+    socket.on('deleted', (taskId) => {
+        socket.emit('deleted', taskId);
     })
     socket.on('disconnect', function(){
         console.log('disconnected from tasks');

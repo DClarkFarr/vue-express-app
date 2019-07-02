@@ -1,6 +1,6 @@
 //var socket = io.connect('http://localhost:3333');
 
-var devDomains = ['localhost:8081'];
+var devDomains = ['localhost:8081', 'localhost:8080'];
 var baseurl = '';
 if( devDomains.indexOf(window.location.host) > -1 ){
     //dev host url
