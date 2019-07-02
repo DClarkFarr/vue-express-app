@@ -32,25 +32,6 @@ app.use('/api', apiRouter);
 app.use(webRouter);
 
 /**
- * Tasks-Specific connection
- */
-Socket.get().of('/tasks').on('connection', function(socket){
-    console.log('socket here');
-    socket.on('updated', (task) => {
-        socket.emit('updated', task);
-    })
-    socket.on('created', (task) => {
-        socket.emit('created', task);
-    })
-    socket.on('deleted', (taskId) => {
-        socket.emit('deleted', taskId);
-    })
-    socket.on('disconnect', function(){
-        console.log('disconnected from tasks');
-    });
-})
-
-/**
  * First start mongo
  *  $ mongod --config /usr/local/etc/mongod.conf
  */

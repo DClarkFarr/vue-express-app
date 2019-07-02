@@ -59,13 +59,9 @@ export default new Vue({
 
             return ApiService.addTask(data).then((result) => {
                 if(result.status == 'success'){
-                    this.tasks.push({...result.task});
-                    this.$emit('task.added', [...this.tasks]);
-                    this.$emit('tasks.updated', [...this.tasks]);
-                    return result;
-                }else{
-                    return result;
+
                 }
+                return result;
             })
         },
         deleteById(id){
@@ -73,12 +69,9 @@ export default new Vue({
                 return id == t.id
             })
 
-            return ApiService.deleteTask(id).then(() => {
-                const tasks = [...this.tasks]
-                tasks.splice(index, 1)
-                this.tasks = tasks;
-                this.$emit('task.deleted', [...this.tasks]);
-                this.$emit('tasks.updated', [...this.tasks]);
+            return ApiService.deleteTask(id).then((result) => {
+
+                return result;
             });
         },
         toggleCompleted(id, userData){
@@ -88,14 +81,27 @@ export default new Vue({
 
             return ApiService.toggleTaskCompleted(id, {user: userData}).then((result) => {
                 if(result.status == 'success'){
-                    task.completed = result.task.completed
-                    task.completed_by = result.task.completed_by
-                    task.completed_at = result.task.completed_at
 
-                    this.$emit('task.toggled', [...this.tasks]);
-                    this.$emit('tasks.updated', [...this.tasks]);
                 }
+                return result;
             });
+        },
+        onCreated(task){
+            this.tasks.push(task);
+        },
+        onUpdated(task){
+            let old = this.tasks.find(t => {
+                return task.id == t.id
+            })
+
+            this.$set(this.tasks, this.tasks.indexOf(old), task);
+        },
+        onDeleted(taskId){
+            let old = this.tasks.find(t => {
+                return taskId == t.id
+            })
+
+            this.tasks.splice( this.tasks.indexOf(old), 1);
         }
     }
 });

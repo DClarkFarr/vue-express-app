@@ -41,13 +41,17 @@ export default {
     var socket = this.$root.tasks.openSocket();
     
     socket.on('connect', () => {
-      this.$root.tasks.$on('tasks.updated', (tasks) => {
-        socket.emit('tasks.updated', {count: tasks.length});
+      socket.on('updated', (task) => {
+        console.log('updated', task);
+        this.$root.tasks.onUpdated(task);
       })
-
-      socket.on('tasks.updated', (body) => {
-        console.log('should be replacing');
-        this.$root.tasks.getTasks(true)
+      socket.on('created', (task) => {
+        console.log('created', task);
+        this.$root.tasks.onCreated(task);
+      })
+      socket.on('deleted', (taskId) => {
+        console.log('deleted', taskId);
+        this.$root.tasks.onDeleted(taskId);
       })
     });
   },

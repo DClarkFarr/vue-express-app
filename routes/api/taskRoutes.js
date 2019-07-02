@@ -5,6 +5,21 @@ const root = require('../../utils/root');
 const getDb = require(root('utils/connection')).getDb;
 const Task = require(root('models/task'));
 
+const Socket = require('../../utils/socket');
+
+
+/**
+ * Tasks-Specific connection
+ */
+let socket = Socket.get().of('/tasks')
+
+socket.on('connection', () => {
+    console.log('connected');
+
+    socket.on('disconnect', () => {
+        console.log('disconected')
+    })
+})
 
 router.get('/', (req, res) => {
     const db = getDb();
@@ -35,12 +50,14 @@ router.post('/add', (req, res) => {
         completed: req.body.completed,
         id_user: req.body.id_user,
     }).then(task => {
+        socket.emit('created', task);
         res.json({status: 'success', task: task});
     });
 });
 
 router.post('/delete/:id_task', (req, res) => {
-    Task.delete(req.params.id_task).then(result => {
+    Task.delete(req.params.id_task).then(result => {  
+        socket.emit('deleted', req.params.id_task);
         res.json({status: 'Success', message: "Task Deleted"});
     })
 })
@@ -54,6 +71,7 @@ router.post('/toggleCompleted/:id_task', (req, res) => {
             promise = task.markComplete(req.body.user);
         }
         promise.then(() => {
+            socket.emit('updated', task);
             res.json({status: 'success', task: task});
         })
     })
